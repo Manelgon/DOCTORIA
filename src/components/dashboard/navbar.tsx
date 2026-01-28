@@ -250,7 +250,7 @@ export function Navbar() {
                                 </button>
                             </div>
 
-                            <div className="p-6">
+                            <div className="flex-1 overflow-y-auto p-6">
                                 <div className="flex items-center space-x-3 mb-8 pb-8 border-b border-slate-800">
                                     <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border">
                                         <User className="h-7 w-7 text-blue-600" />
