@@ -288,45 +288,45 @@ export function EditPatientModal({ patient, carteras, trigger, onOpenChange }: E
                                     <MapPin className="h-4 w-4" /> Dirección Postal
                                 </h3>
 
-                                <div className="grid grid-cols-6 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                                     {/* Row 1: Location */}
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="province" className="text-slate-700 font-semibold italic text-xs">Provincia</Label>
                                         <ProvinceSelect required defaultValue={patient.province} />
                                     </div>
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="city" className="text-slate-700 font-semibold italic text-xs">Ciudad / Localidad</Label>
                                         <Input id="city" name="city" defaultValue={patient.city} placeholder="Ciudad" required className="h-10 rounded-xl" />
                                     </div>
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="zip_code" className="text-slate-700 font-semibold italic text-xs">C. Postal</Label>
                                         <Input id="zip_code" name="zip_code" defaultValue={patient.zip_code} placeholder="00000" required className="h-10 rounded-xl" />
                                     </div>
 
                                     {/* Row 2: Street Info */}
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="street_type" className="text-slate-700 font-semibold italic text-xs">Tipo de Vía</Label>
                                         <StreetTypeSelect defaultValue={patient.street_type} />
                                     </div>
-                                    <div className="col-span-3 space-y-2">
+                                    <div className="col-span-1 md:col-span-3 space-y-2">
                                         <Label htmlFor="street" className="text-slate-700 font-semibold italic text-xs">Nombre de la Vía</Label>
                                         <Input id="street" name="street" defaultValue={patient.street} placeholder="Ej: Gran Vía" required className="h-10 rounded-xl" />
                                     </div>
-                                    <div className="col-span-1 space-y-2">
+                                    <div className="col-span-1 md:col-span-1 space-y-2">
                                         <Label htmlFor="street_number" className="text-slate-700 font-semibold italic text-xs">Número</Label>
                                         <Input id="street_number" name="street_number" defaultValue={patient.street_number} placeholder="Nº" required className="h-10 rounded-xl" />
                                     </div>
 
                                     {/* Row 3: Details */}
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="block" className="text-slate-700 font-semibold italic text-xs">Bloque</Label>
                                         <Input id="block" name="block" defaultValue={patient.block} placeholder="Blq" className="h-10 rounded-xl" />
                                     </div>
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="floor" className="text-slate-700 font-semibold italic text-xs">Piso / Planta</Label>
                                         <Input id="floor" name="floor" defaultValue={patient.floor} placeholder="Piso" className="h-10 rounded-xl" />
                                     </div>
-                                    <div className="col-span-2 space-y-2">
+                                    <div className="col-span-1 md:col-span-2 space-y-2">
                                         <Label htmlFor="door" className="text-slate-700 font-semibold italic text-xs">Puerta</Label>
                                         <Input id="door" name="door" defaultValue={patient.door} placeholder="Pta" className="h-10 rounded-xl" />
                                     </div>

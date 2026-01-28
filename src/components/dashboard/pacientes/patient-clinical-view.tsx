@@ -204,7 +204,7 @@ export function PatientClinicalView({ patient, consultations, doctorProfile, ant
                                         <Contact className="h-4 w-4" />
                                         Datos de Contacto
                                     </h3>
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {/* Left Column */}
                                         <div className="space-y-3">
                                             <div className="space-y-1">

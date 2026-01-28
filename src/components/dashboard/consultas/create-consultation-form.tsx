@@ -147,10 +147,10 @@ export function CreateConsultationForm({ patientId, doctorProfile }: { patientId
                             const vitalConfig = VITAL_TYPES[vital.type as keyof typeof VITAL_TYPES]
                             const TypeIcon = vitalConfig?.icon || Activity
                             return (
-                                <div key={idx} className="flex items-center gap-2">
-                                    <div className="w-48 flex-none bg-gray-50 border border-slate-200 rounded px-2 py-1 flex items-center gap-2">
+                                <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                    <div className="w-full sm:w-48 flex-none bg-gray-50 border border-slate-200 rounded px-2 py-1.5 flex items-center gap-2">
                                         <TypeIcon className="h-3.5 w-3.5 text-slate-500" />
-                                        <span className="text-[10px] font-semibold text-slate-700 uppercase tracking-tight">
+                                        <span className="text-[10px] font-bold text-slate-700 uppercase tracking-tight">
                                             {vitalConfig?.label}
                                         </span>
                                     </div>

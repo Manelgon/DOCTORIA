@@ -134,7 +134,7 @@ export function ConsultationDetailModal({ consultation, isOpen, onClose }: Consu
                             <h3 className="text-xs font-bold text-gray-700 uppercase tracking-widest">Signos Vitales</h3>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             {consultation.signos_vitales && consultation.signos_vitales.length > 0 ? (
                                 consultation.signos_vitales.map((vital, idx) => {
                                     const config = VITAL_LABELS[vital.type as keyof typeof VITAL_LABELS] || VITAL_LABELS.presion
