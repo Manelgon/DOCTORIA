@@ -121,16 +121,16 @@ export function CreatePatientModal({ carteras, defaultCarteraId, trigger }: Crea
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={(e) => e.stopPropagation()}
         >
             <form
                 action={handleSubmit}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-3xl max-h-[90vh] flex flex-col relative animate-in zoom-in-95 duration-200"
+                className="bg-white border-slate-200 w-full max-w-3xl flex flex-col relative animate-in zoom-in-95 duration-200 h-full sm:h-auto sm:max-h-[90vh] rounded-none sm:rounded-3xl shadow-none sm:shadow-2xl border-0 sm:border"
             >
                 {/* HEADER */}
-                <div className="p-6 border-b border-slate-200 flex items-center justify-between flex-none bg-slate-50/50 rounded-t-3xl">
+                <div className="p-6 border-b border-slate-200 flex items-center justify-between flex-none bg-slate-50/50 rounded-none sm:rounded-t-3xl">
                     <h2 className="font-bold text-xl text-slate-900 flex items-center gap-2">
                         <UserPlus className="h-6 w-6 text-blue-600" />
                         Alta de Nuevo Paciente
@@ -434,7 +434,7 @@ export function CreatePatientModal({ carteras, defaultCarteraId, trigger }: Crea
                 </div>
 
                 {/* FOOTER */}
-                <div className="p-6 border-t border-slate-200 bg-slate-50 rounded-b-3xl">
+                <div className="p-6 border-t border-slate-200 bg-slate-50 rounded-none sm:rounded-b-3xl">
                     <Button
                         type="submit"
                         disabled={isPending}

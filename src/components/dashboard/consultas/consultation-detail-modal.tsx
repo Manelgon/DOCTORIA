@@ -89,8 +89,8 @@ export function ConsultationDetailModal({ consultation, isOpen, onClose }: Consu
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-3xl bg-white rounded-md p-0 overflow-hidden border-gray-200 shadow-sm">
-                <DialogHeader className="p-4 bg-gray-50 border-b border-gray-200">
+            <DialogContent className="sm:max-w-3xl h-full sm:h-auto bg-white p-0 overflow-hidden border-gray-200 shadow-sm rounded-none sm:rounded-md">
+                <DialogHeader className="p-4 bg-gray-50 border-b border-gray-200 rounded-none sm:rounded-t-md">
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center">
                             <div className="flex flex-col">

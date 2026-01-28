@@ -30,7 +30,7 @@ export function DocumentsHistoryModal({ documents, open, onOpenChange, trigger }
                 </DialogTrigger>
             )}
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-            <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0 gap-0 bg-slate-50 overflow-hidden rounded-3xl">
+            <DialogContent className="sm:max-w-4xl h-full sm:h-[80vh] flex flex-col p-0 gap-0 bg-slate-50 overflow-hidden rounded-none sm:rounded-3xl">
                 <DialogHeader className="p-6 border-b border-slate-100 bg-white shadow-sm z-10">
                     <DialogTitle className="flex items-center gap-2 text-xl">
                         <FolderOpen className="h-6 w-6 text-blue-600" />

@@ -64,13 +64,13 @@ export function CreatePortfolioModal() {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={(e) => e.stopPropagation()}
         >
             <form
                 action={handleSubmit}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg relative animate-in zoom-in-95 duration-200 overflow-hidden"
+                className="bg-white border-slate-200 w-full max-w-lg relative animate-in zoom-in-95 duration-200 overflow-hidden h-full sm:h-auto rounded-none sm:rounded-3xl shadow-none sm:shadow-2xl border-0 sm:border"
             >
                 {/* HEADER */}
                 <div className="p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
@@ -148,7 +148,7 @@ export function CreatePortfolioModal() {
                 </div>
 
                 {/* FOOTER */}
-                <div className="p-6 border-t border-slate-200 bg-slate-50">
+                <div className="p-6 border-t border-slate-200 bg-slate-50 rounded-none sm:rounded-b-3xl">
                     <Button
                         type="submit"
                         disabled={isPending}

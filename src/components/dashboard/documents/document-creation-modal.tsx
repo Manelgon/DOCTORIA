@@ -291,8 +291,8 @@ export function DocumentCreationModal({ isOpen, onClose, patient, doctor, initia
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-3xl bg-white p-0 overflow-hidden border-gray-200">
-                <DialogHeader className="p-6 bg-slate-50 border-b border-gray-100">
+            <DialogContent className="sm:max-w-3xl h-full sm:h-auto bg-white p-0 overflow-hidden border-gray-200 rounded-none sm:rounded-3xl">
+                <DialogHeader className="p-6 bg-slate-50 border-b border-gray-100 rounded-none sm:rounded-t-3xl">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
                             <FileText className="h-5 w-5 text-blue-600" />
@@ -470,7 +470,7 @@ export function DocumentCreationModal({ isOpen, onClose, patient, doctor, initia
                     </div>
                 </div>
 
-                <DialogFooter className="p-6 bg-slate-50 border-t border-gray-100 sm:justify-between items-center">
+                <DialogFooter className="p-6 bg-slate-50 border-t border-gray-100 sm:justify-between items-center rounded-none sm:rounded-b-3xl">
                     <div className="hidden sm:block">
                         {step > 1 && (
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
