@@ -41,6 +41,13 @@ export default async function NewConsultationPage({ params }: { params: Promise<
         .eq("patient_id", id)
         .order("created_at", { ascending: false })
 
+    // Fetch doctor profile
+    const { data: doctorProfile } = await supabase
+        .from("profiles")
+        .select("id, nombre, apellidos, full_name, especialidad")
+        .eq("id", user.id)
+        .single()
+
     return (
         <DashboardLayout>
             <div className="space-y-8">
@@ -71,7 +78,7 @@ export default async function NewConsultationPage({ params }: { params: Promise<
 
                 {/* Form Wrapper */}
                 <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
-                    <CreateConsultationForm patientId={patient.id} />
+                    <CreateConsultationForm patientId={patient.id} doctorProfile={doctorProfile} />
                 </div>
             </div>
         </DashboardLayout>
