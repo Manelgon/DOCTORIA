@@ -218,6 +218,13 @@ export function Navbar() {
                         <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border">
                             <User className="h-6 w-6 text-blue-600" />
                         </div>
+                        <button
+                            onClick={() => logout()}
+                            className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors ml-1"
+                            title="Cerrar Sesión"
+                        >
+                            <LogOut className="h-5 w-5" />
+                        </button>
                     </div>
 
                     <button
@@ -251,14 +258,23 @@ export function Navbar() {
                             </div>
 
                             <div className="flex-1 overflow-y-auto p-6">
-                                <div className="flex items-center space-x-3 mb-8 pb-8 border-b border-slate-800">
-                                    <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border">
-                                        <User className="h-7 w-7 text-blue-600" />
+                                <div className="flex items-center justify-between mb-8 pb-8 border-b border-slate-800">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border border-blue-200">
+                                            <User className="h-7 w-7 text-blue-600" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-white">{displayName}</p>
+                                            <p className="text-xs text-slate-400 capitalize">{formattedRole}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-semibold text-white">{displayName}</p>
-                                        <p className="text-xs text-slate-400 capitalize">{formattedRole}</p>
-                                    </div>
+                                    <button
+                                        onClick={() => logout()}
+                                        className="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-900/20 rounded-full transition-colors"
+                                        title="Cerrar Sesión"
+                                    >
+                                        <LogOut className="h-5 w-5" />
+                                    </button>
                                 </div>
 
                                 <nav className="space-y-2">
@@ -292,15 +308,7 @@ export function Navbar() {
                                 </nav>
                             </div>
 
-                            <div className="mt-auto border-t border-slate-800 p-6">
-                                <button
-                                    onClick={() => logout()}
-                                    className="flex w-full items-center rounded-lg px-3 py-3 text-sm font-medium text-slate-300 hover:bg-red-900/20 hover:text-red-400 transition-colors"
-                                >
-                                    <LogOut className="mr-3 h-5 w-5 text-slate-400 group-hover:text-red-400" />
-                                    Cerrar Sesión
-                                </button>
-                            </div>
+                            {/* Removed bottom logout button */}
                         </div>
                     </div>
                 </div>

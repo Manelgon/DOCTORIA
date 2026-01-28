@@ -101,15 +101,7 @@ export function Sidebar() {
                     )
                 })}
             </nav>
-            <div className="border-t border-slate-800 p-4">
-                <button
-                    onClick={() => logout()}
-                    className="flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-slate-300 hover:bg-red-900/20 hover:text-red-400 transition-colors"
-                >
-                    <LogOut className="mr-3 h-5 w-5 text-slate-400 group-hover:text-red-400" />
-                    Cerrar Sesión
-                </button>
-            </div>
+            {/* Removed logout button from here as it is now in the top navbar profile section */}
         </div>
     )
 }
