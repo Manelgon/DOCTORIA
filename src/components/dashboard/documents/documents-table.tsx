@@ -217,29 +217,6 @@ export function DocumentsTable({ documents, itemsPerPage = 10, patientEmail, onC
         return null
     }
 
-    const getExpirationStatus = (expiresAt?: string) => {
-        if (!expiresAt) return null
-        const now = new Date()
-        const expiry = new Date(expiresAt)
-        const diffDays = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-
-        if (diffDays < 0) return { label: "CADUCADO", color: "bg-red-100 text-red-700 border-red-200" }
-        if (diffDays <= 30) return { label: `RENOVAR (${diffDays}d)`, color: "bg-amber-100 text-amber-700 border-amber-200 animate-pulse" }
-        return null
-    }
-
-    if (documents.length === 0) {
-        return (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                    <FileText className="h-8 w-8 text-slate-300" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">No hay documentos</h3>
-                <p className="text-slate-500">Este paciente no tiene documentos adjuntos.</p>
-            </div>
-        )
-    }
-
     // General upload (new document)
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -250,7 +227,6 @@ export function DocumentsTable({ documents, itemsPerPage = 10, patientEmail, onC
             const supabase = createClient()
 
             // Format filename: DocumentName_CIP_Date.pdf
-            // We use the original name but sanitized
             const today = new Date()
             const day = String(today.getDate()).padStart(2, '0')
             const month = String(today.getMonth() + 1).padStart(2, '0')
@@ -308,16 +284,10 @@ export function DocumentsTable({ documents, itemsPerPage = 10, patientEmail, onC
             const supabase = createClient()
             const doc = activeDocForUpload
 
-            // We upload the new signed file. 
-            // We could overwrite the existing file path or create a new one.
-            // Creating a new one is safer to avoid cache issues and keep history if needed (though we replace URL).
-            // Let's maximize safety by adding _signed suffix.
-
             const today = new Date()
             const dateStr = `${String(today.getDate()).padStart(2, '0')}_${String(today.getMonth() + 1).padStart(2, '0')}_${today.getFullYear()}`
             const fileExt = file.name.split('.').pop() || 'pdf'
 
-            // Try to keep original name base if possible, or use doc name
             const sanitizedDocName = doc.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()
             const fileName = `${sanitizedDocName}_SIGNED_${dateStr}.${fileExt}`
             const filePath = `${doc.url.split('/').slice(-2)[0]}/${fileName}` // Attempt to put in same CIP folder
@@ -360,6 +330,84 @@ export function DocumentsTable({ documents, itemsPerPage = 10, patientEmail, onC
     const triggerUploadSigned = (doc: Document) => {
         setActiveDocForUpload(doc)
         setTimeout(() => signedFileInputRef.current?.click(), 0)
+    }
+
+    const getExpirationStatus = (expiresAt?: string) => {
+        if (!expiresAt) return null
+        const now = new Date()
+        const expiry = new Date(expiresAt)
+        const diffDays = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+
+        if (diffDays < 0) return { label: "CADUCADO", color: "bg-red-100 text-red-700 border-red-200" }
+        if (diffDays <= 30) return { label: `RENOVAR (${diffDays}d)`, color: "bg-amber-100 text-amber-700 border-amber-200 animate-pulse" }
+        return null
+    }
+
+    if (documents.length === 0 && !searchTerm && activeTab === 'todos') {
+        return (
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 bg-white p-4 rounded-xl border border-slate-200">
+                    <div className="flex-1" />
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            onChange={handleFileUpload}
+                            accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                        <Button
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isUploading}
+                            variant="outline"
+                            size="icon"
+                            className="h-9 w-9 text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-sm"
+                            title="Subir documento existente"
+                        >
+                            {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                        </Button>
+
+                        {onCreateDocument && (
+                            <Button
+                                onClick={() => onCreateDocument?.()}
+                                size="icon"
+                                className="h-9 w-9 bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                                title="Crear nuevo documento"
+                            >
+                                <Plus className="h-5 w-5" />
+                            </Button>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center py-12 text-center bg-white rounded-xl border border-dashed border-slate-200">
+                    <div className="h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <FileText className="h-8 w-8 text-slate-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900">No hay documentos</h3>
+                    <p className="text-slate-500 mb-6">Este paciente no tiene documentos adjuntos todavía.</p>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            onClick={() => fileInputRef.current?.click()}
+                            variant="outline"
+                            className="gap-2"
+                        >
+                            <Upload className="h-4 w-4" />
+                            Subir Documento
+                        </Button>
+                        {onCreateDocument && (
+                            <Button
+                                onClick={() => onCreateDocument?.()}
+                                className="bg-blue-600 hover:bg-blue-700 gap-2"
+                            >
+                                <Plus className="h-4 w-4" />
+                                Crear Documento
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -479,114 +527,122 @@ export function DocumentsTable({ documents, itemsPerPage = 10, patientEmail, onC
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {paginatedDocs.map((doc) => (
-                                <tr key={doc.id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-4 py-3 font-medium text-slate-900">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
-                                                <TypeIcon type={doc.type} />
+                            {paginatedDocs.length > 0 ? (
+                                paginatedDocs.map((doc) => (
+                                    <tr key={doc.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-4 py-3 font-medium text-slate-900">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                                                    <TypeIcon type={doc.type} />
+                                                </div>
+                                                {doc.name}
                                             </div>
-                                            {doc.name}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <span className="px-2 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600">
-                                            {TYPE_LABELS[doc.type as keyof typeof TYPE_LABELS] || doc.type}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        {['informe', 'receta', 'consentimiento'].includes(doc.type) ? (
-                                            doc.is_signed ? (
-                                                <span className="inline-flex items-center w-fit px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                                    FIRMADO
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center w-fit px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100">
-                                                    PENDIENTE
-                                                </span>
-                                            )
-                                        ) : null}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        {doc.expires_at && ['informe', 'receta', 'consentimiento'].includes(doc.type) ? (
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-xs text-slate-600">
-                                                    {new Date(doc.expires_at).toLocaleDateString()}
-                                                </span>
-                                                {getExpirationStatus(doc.expires_at) && (
-                                                    <span className={cn(
-                                                        "inline-flex items-center w-fit px-2 py-0.5 rounded text-[9px] font-bold border",
-                                                        getExpirationStatus(doc.expires_at)?.color
-                                                    )}>
-                                                        {getExpirationStatus(doc.expires_at)?.label}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span className="px-2 py-1 rounded-full bg-slate-100 text-xs font-medium text-slate-600">
+                                                {TYPE_LABELS[doc.type as keyof typeof TYPE_LABELS] || doc.type}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {['informe', 'receta', 'consentimiento'].includes(doc.type) ? (
+                                                doc.is_signed ? (
+                                                    <span className="inline-flex items-center w-fit px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                                        FIRMADO
                                                     </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center w-fit px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100">
+                                                        PENDIENTE
+                                                    </span>
+                                                )
+                                            ) : null}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {doc.expires_at && ['informe', 'receta', 'consentimiento'].includes(doc.type) ? (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-xs text-slate-600">
+                                                        {new Date(doc.expires_at).toLocaleDateString()}
+                                                    </span>
+                                                    {getExpirationStatus(doc.expires_at) && (
+                                                        <span className={cn(
+                                                            "inline-flex items-center w-fit px-2 py-0.5 rounded text-[9px] font-bold border",
+                                                            getExpirationStatus(doc.expires_at)?.color
+                                                        )}>
+                                                            {getExpirationStatus(doc.expires_at)?.label}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs text-slate-400">---</span>
+                                            )}
+                                        </td>
+                                        <td className="px-4 py-3 text-slate-500">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-3.5 w-3.5" />
+                                                {new Date(doc.created_at).toLocaleDateString()}
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <div className="flex justify-end gap-1">
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => handleViewDocument(doc)}
+                                                    title="Ver documento"
+                                                >
+                                                    <ExternalLink className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
+                                                    onClick={() => handleDownloadDocument(doc)}
+                                                    title="Descargar"
+                                                >
+                                                    <Download className="h-4 w-4" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="h-8 w-8 p-0 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
+                                                    onClick={() => patientEmail ? setEmailDoc(doc) : toast.error("El paciente no tiene email registrado")}
+                                                    title="Enviar por email"
+                                                >
+                                                    <Mail className="h-4 w-4" />
+                                                </Button>
+                                                {['informe', 'receta', 'consentimiento'].includes(doc.type) && (!doc.is_signed || (doc.expires_at && new Date(doc.expires_at) < new Date())) && (
+                                                    <>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            className="h-8 w-8 p-0 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                                                            onClick={() => triggerUploadSigned(doc)}
+                                                            title="Subir documento firmado (Reemplazar)"
+                                                        >
+                                                            <Upload className="h-4 w-4" />
+                                                        </Button>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            className="h-8 w-8 p-0 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                                                            onClick={() => handleRegenerate(doc)}
+                                                            title="Regenerar con nuevas fechas"
+                                                        >
+                                                            <RefreshCw className="h-4 w-4" />
+                                                        </Button>
+                                                    </>
                                                 )}
                                             </div>
-                                        ) : (
-                                            <span className="text-xs text-slate-400">---</span>
-                                        )}
-                                    </td>
-                                    <td className="px-4 py-3 text-slate-500">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-3.5 w-3.5" />
-                                            {new Date(doc.created_at).toLocaleDateString()}
-                                        </div>
-                                    </td>
-                                    <td className="px-4 py-3 text-right">
-                                        <div className="flex justify-end gap-1">
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => handleViewDocument(doc)}
-                                                title="Ver documento"
-                                            >
-                                                <ExternalLink className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                className="h-8 w-8 p-0 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50"
-                                                onClick={() => handleDownloadDocument(doc)}
-                                                title="Descargar"
-                                            >
-                                                <Download className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                className="h-8 w-8 p-0 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
-                                                onClick={() => patientEmail ? setEmailDoc(doc) : toast.error("El paciente no tiene email registrado")}
-                                                title="Enviar por email"
-                                            >
-                                                <Mail className="h-4 w-4" />
-                                            </Button>
-                                            {['informe', 'receta', 'consentimiento'].includes(doc.type) && (!doc.is_signed || (doc.expires_at && new Date(doc.expires_at) < new Date())) && (
-                                                <>
-                                                    <Button
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        className="h-8 w-8 p-0 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
-                                                        onClick={() => triggerUploadSigned(doc)}
-                                                        title="Subir documento firmado (Reemplazar)"
-                                                    >
-                                                        <Upload className="h-4 w-4" />
-                                                    </Button>
-                                                    <Button
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        className="h-8 w-8 p-0 text-purple-600 hover:text-purple-700 hover:bg-purple-50"
-                                                        onClick={() => handleRegenerate(doc)}
-                                                        title="Regenerar con nuevas fechas"
-                                                    >
-                                                        <RefreshCw className="h-4 w-4" />
-                                                    </Button>
-                                                </>
-                                            )}
-                                        </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} className="px-4 py-8 text-center text-slate-400 italic">
+                                        No se han encontrado documentos con estos filtros.
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
