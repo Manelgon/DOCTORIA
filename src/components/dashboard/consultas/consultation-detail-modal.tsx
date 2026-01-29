@@ -89,8 +89,8 @@ export function ConsultationDetailModal({ consultation, isOpen, onClose }: Consu
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-3xl h-full sm:h-auto bg-white p-0 overflow-hidden border-gray-200 shadow-sm rounded-none sm:rounded-md">
-                <DialogHeader className="p-4 bg-gray-50 border-b border-gray-200 rounded-none sm:rounded-t-md">
+            <DialogContent className="sm:max-w-3xl h-full sm:h-auto bg-white p-0 border-gray-200 shadow-sm rounded-none sm:rounded-md flex flex-col">
+                <DialogHeader className="p-4 bg-gray-50 border-b border-gray-200 rounded-none sm:rounded-t-md flex-shrink-0">
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center">
                             <div className="flex flex-col">
@@ -125,7 +125,7 @@ export function ConsultationDetailModal({ consultation, isOpen, onClose }: Consu
                     </div>
                 </DialogHeader>
 
-                <div className="p-6 space-y-7">
+                <div className="p-6 space-y-7 overflow-y-auto flex-1">
 
                     {/* Ficha de Constantes Vitales */}
                     <div className="space-y-3">
